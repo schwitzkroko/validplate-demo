@@ -1,10 +1,10 @@
-package net.schwitzkroko.demo.validplate.district.impl;
+package net.schwitzkroko.demo.validplate.distinct.district.impl;
 
 import io.quarkus.runtime.Startup;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.inject.Produces;
 import lombok.extern.slf4j.Slf4j;
-import net.schwitzkroko.demo.validplate.district.DistrictRepo;
+import net.schwitzkroko.demo.validplate.distinct.district.DistrictRepo;
 
 import java.io.IOException;
 
@@ -13,7 +13,7 @@ import java.io.IOException;
 public class DistrictRepoConfig {
 
     static final String CSV_RESOURCE = "/distinct/kennzeichen.csv";
-	
+
     @Produces
     @ApplicationScoped
     @Startup

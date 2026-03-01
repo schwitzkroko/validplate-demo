@@ -1,4 +1,4 @@
-package net.schwitzkroko.demo.validplate.district.impl;
+package net.schwitzkroko.demo.validplate.distinct.district.impl;
 
 import java.io.IOException;
 import java.util.List;
@@ -6,9 +6,7 @@ import java.util.List;
 import org.junit.jupiter.api.Test;
 
 import lombok.extern.slf4j.Slf4j;
-import net.schwitzkroko.demo.validplate.district.impl.DistrictRepoConfig;
-import net.schwitzkroko.demo.validplate.district.DistrictRecord;
-import net.schwitzkroko.demo.validplate.district.impl.DistrictCsvUtil;
+import net.schwitzkroko.demo.validplate.distinct.district.DistrictRecord;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
@@ -25,20 +23,11 @@ class DistrictCsvUtilTest {
 
         DistrictRecord first = districts.get(0);
         log.debug("First record: {}", first);
-        
+
         assertThat(first.national(), equalTo("D"));
         assertThat(first.code(), equalTo("A"));
         assertThat(first.cityOrDistrict(), equalTo("Augsburg"));
         assertThat(first.landName(), equalTo("Bayern"));
         assertThat(first.landIso(), equalTo("DE-BY"));
-
-//        assertThat(districts, hasItem(
-//            allOf(
-//                hasProperty("code", equalTo("AA")),
-//                hasProperty("cityOrDistrict", equalTo("Ostalbkreis")),
-//                hasProperty("stateName", equalTo("Baden-Württemberg")),
-//                hasProperty("stateIso", equalTo("DE-BW"))
-//            )
-//        ));
     }
 }

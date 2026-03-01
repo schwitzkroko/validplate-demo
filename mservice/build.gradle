@@ -13,6 +13,7 @@ dependencies {
     implementation 'io.quarkus:quarkus-smallrye-openapi'
     implementation 'io.quarkus:quarkus-container-image-docker'
     
+    implementation 'org.apache.commons:commons-text'
     implementation 'org.slf4j:slf4j-api'
     implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-csv:2.20.1'
     implementation 'org.projectlombok:lombok:1.18.42'
@@ -23,6 +24,5 @@ dependencies {
     testImplementation 'io.quarkus:quarkus-junit'
     testImplementation 'io.rest-assured:rest-assured'
     testImplementation 'org.hamcrest:hamcrest'
-    testImplementation 'org.apache.commons:commons-text'
     testRuntimeOnly 'ch.qos.logback:logback-classic:1.5.18'
 }

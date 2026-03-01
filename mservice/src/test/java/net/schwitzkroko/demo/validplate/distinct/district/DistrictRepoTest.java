@@ -1,18 +1,19 @@
-package net.schwitzkroko.demo.validplate.district;
+package net.schwitzkroko.demo.validplate.distinct.district;
 
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
-import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 
-@Slf4j
+
 @QuarkusTest
+@Slf4j
 class DistrictRepoTest {
 
     @Inject
@@ -48,11 +49,11 @@ class DistrictRepoTest {
         log.debug("findByCode(\"{}\"): {}", code, result);
 
         if (StringUtils.isBlank(expectedCityOrDistrict)) {
-			assertThat(result, is(nullValue()));
-		} else {
-        assertThat(result, is(notNullValue()));
-        assertThat(result.cityOrDistrict(), equalTo(expectedCityOrDistrict));
-		}
+            assertThat(result, is(nullValue()));
+        } else {
+            assertThat(result, is(notNullValue()));
+            assertThat(result.cityOrDistrict(), equalTo(expectedCityOrDistrict));
+        }
     }
 
     @Test
