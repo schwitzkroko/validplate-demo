@@ -4,12 +4,25 @@ plugins {
 }
 
 dependencies {
+
     implementation enforcedPlatform("${quarkusPlatformGroupId}:${quarkusPlatformArtifactId}:${quarkusPlatformVersion}")
+    
     implementation 'io.quarkus:quarkus-rest'
     implementation 'io.quarkus:quarkus-rest-jackson'
     implementation 'io.quarkus:quarkus-arc'
     implementation 'io.quarkus:quarkus-smallrye-openapi'
     implementation 'io.quarkus:quarkus-container-image-docker'
+    
+    implementation 'org.slf4j:slf4j-api'
+    implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-csv:2.20.1'
+    implementation 'org.projectlombok:lombok:1.18.42'
+    
+    annotationProcessor 'org.projectlombok:lombok:1.18.42'
+    testAnnotationProcessor 'org.projectlombok:lombok:1.18.42'
+    
     testImplementation 'io.quarkus:quarkus-junit'
     testImplementation 'io.rest-assured:rest-assured'
+    testImplementation 'org.hamcrest:hamcrest'
+    testImplementation 'org.apache.commons:commons-text'
+    testRuntimeOnly 'ch.qos.logback:logback-classic:1.5.18'
 }
