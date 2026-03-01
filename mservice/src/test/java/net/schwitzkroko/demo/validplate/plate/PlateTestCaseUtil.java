@@ -9,10 +9,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 
-class PlateTestCaseUtil {
+public class PlateTestCaseUtil {
 
 
-    static List<PlateTestData> parse(String resource) throws IOException {
+    public static List<PlateTestData> parse(String resource) throws IOException {
         CsvMapper mapper = new CsvMapper();
         mapper.enable(CsvParser.Feature.TRIM_SPACES);
         mapper.enable(CsvParser.Feature.ALLOW_TRAILING_COMMA);
@@ -31,7 +31,7 @@ class PlateTestCaseUtil {
         }
     }
     
-    record PlateTestData(
+    public record PlateTestData(
             @JsonProperty("input")   String input,
             @JsonProperty("success") Boolean success,
             @JsonProperty("output")  String output,

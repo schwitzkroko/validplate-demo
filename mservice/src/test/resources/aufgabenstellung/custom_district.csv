@@ -1,6 +1,36 @@
 input, success, output, remark
-LIIT 100, true, LI-IT100, da alle Bestandteile eindeutig differenzierbar
-HalloWelt!, false, , da Bestandteile nicht eindeutig und nicht valide
-LI-IT 100, true, LI-IT100, da alle Bestandteile eindeutig differenzierbar
-LIT 100, false, , da Bestandteile nicht eindeutig und nicht valide
-, false, , input ist blank
+B AB1234, true, B-AB1234, Berlin - einbuchstabiger Code mit max. Ziffernlänge
+B-AB 1234, true, B-AB1234, Berlin mit Bindestrich und Leerzeichen - normalisiert identisch
+M XY99, true, M-XY99, München - einbuchstabiger Code
+HH AB123, true, HH-AB123, Hamburg zweistellig
+HH-AB 123, true, HH-AB123, Hamburg mit Bindestrich - normalisiert identisch
+K RS7, true, K-RS7, Köln - einbuchstabige Unterscheidung
+F UV42, true, F-UV42, Frankfurt am Main
+S CD8, true, S-CD8, Stuttgart
+DD EF5, true, DD-EF5, Dresden
+L GH9, true, L-GH9, Leipzig
+AC IJ3, true, AC-IJ3, Aachen
+AA KL22, true, AA-KL22, Ostalbkreis (Aalen)
+AB MN1, true, AB-MN1, Aschaffenburg
+MIL OP6, true, MIL-OP6, Main-Tauber-Kreis (Mergentheim)
+KL QR77, true, KL-QR77, Kaiserslautern
+BO ST4, true, BO-ST4, Bochum
+DO UV8, true, DO-UV8, Dortmund
+DU WX55, true, DU-WX55, Duisburg
+E YZ1, true, E-YZ1, Essen
+GE AB2, true, GE-AB2, Gelsenkirchen
+MS CD3, true, MS-CD3, Münster
+N EF4, true, N-EF4, Nürnberg
+NU GH5, true, NU-GH5, Neu-Ulm
+OG IJ6, true, OG-IJ6, Ortenaukreis
+RE KL7, true, RE-KL7, Recklinghausen
+RO MN8, true, RO-MN8, Rosenheim
+WI OP9, true, WI-OP9, Wiesbaden
+WÜ QR10, true, WÜ-QR10, Würzburg - Umlaut im Unterscheidungszeichen
+b ab1234, true, B-AB1234, Kleinbuchstaben werden zu Großbuchstaben normalisiert
+ HH AB123 , true, HH-AB123, führende/nachfolgende Leerzeichen werden getrimmt
+XYZ AB1, false, , XYZ ist kein gültiger Kreis-Code in der Datenbasis
+BUND AB1, false, , BUND hat 4 Zeichen - überschreitet Regex-Limit
+HH ABCD1, false, , vier Buchstaben im zweiten Segment - Regex-Mismatch
+HH AB12345, false, , fünf Ziffern - überschreitet Regex-Limit
+HH 1234, false, , kein Buchstabenteil - Regex-Mismatch

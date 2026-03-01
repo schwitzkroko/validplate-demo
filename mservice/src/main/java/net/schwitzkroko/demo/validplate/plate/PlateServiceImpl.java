@@ -17,9 +17,11 @@ import org.apache.commons.lang3.StringUtils;
 class PlateServiceImpl implements PlateService {
 
     /**
-     * Plate format after stripping whitespace:
+     * Matches a fully normalised plate string (no spaces, uppercase).
+     * A hyphen between district code and letters is optional because the
+     * normalisation step already canonicalises both '-' and ' ' separators.
      *   district code  : 1–3 uppercase letters   (e.g. LI, AA, B)
-     *   optional hyphen: literal '-'
+     *   optional hyphen: literal '-' (already inserted by normalisation)
      *   letters part   : 1–3 uppercase letters   (e.g. IT, AB)
      *   digits part    : 1–4 digits               (e.g. 100, 1)
      *
@@ -38,8 +40,17 @@ class PlateServiceImpl implements PlateService {
             return PlateModel.Invalid.INSTANCE;
         }
 
-        // Normalise: trim surrounding whitespace, collapse inner whitespace, uppercase
-        String normalised = plate.strip().replaceAll("\\s+", "").toUpperCase();
+        // Normalise: trim, uppercase, then canonicalise the separator between
+        // district code and the letter/digit part.
+        // A hyphen or whitespace between two letter-groups is treated as the
+        // canonical '-' separator; all remaining whitespace is then removed.
+        // Examples:
+        //   "LI-IT 100"  -> "LI-IT100"
+        //   "LI IT100"   -> "LI-IT100"   (space as separator)
+        //   "LIIT 100"   -> "LIIT100"    (no separator — may be ambiguous)
+        String normalised = plate.strip().toUpperCase()
+                .replaceAll("([A-ZÄÖÜ]{1,3})[\\s-]+([A-Z])", "$1-$2")
+                .replaceAll("\\s+", "");
         log.debug("digest: normalised='{}' from input='{}'", normalised, plate);
 
         Matcher m = PLATE_PATTERN.matcher(normalised);
