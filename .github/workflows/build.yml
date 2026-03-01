@@ -34,12 +34,12 @@ jobs:
     
     - name: Build with Gradle mservice and Push Quarkus Container Image
       run: ./gradlew :mservice:build \
-        -Dquarkus.container-image.build=true \
-        -Dquarkus.container-image.push=true \
-        -Dquarkus.container-image.registry=ghcr.io \
-        -Dquarkus.container-image.group=${{ github.repository_owner }} \
-        -Dquarkus.container-image.name=validplate-mservice \
-        -Dquarkus.container-image.tag=latest
+        -Pquarkus.container-image.build=true \
+        -Pquarkus.container-image.push=true \
+        -Pquarkus.container-image.registry=ghcr.io \
+        -Pquarkus.container-image.group=${{ github.repository_owner }} \
+        -Pquarkus.container-image.name=validplate-mservice \
+        -Pquarkus.container-image.tag=latest
     
     # - name: Publish test results
     #   if: always()

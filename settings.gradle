@@ -25,6 +25,6 @@ plugins {
 }
 
 // rootProject.name='my-artifactId'
-rootProject.name = 'carreg_de_validation'
+rootProject.name='validplate-demo'
 // include('app', 'list', 'utilities', 'mservice')
 include('mservice')
