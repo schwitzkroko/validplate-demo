@@ -3,6 +3,12 @@ plugins {
     id 'io.quarkus'
 }
 
+quarkus {
+    plugins {
+        id 'io.quarkus.gradle.extension'
+    }
+}
+
 dependencies {
     implementation enforcedPlatform("${quarkusPlatformGroupId}:${quarkusPlatformArtifactId}:${quarkusPlatformVersion}")
     implementation 'io.quarkus:quarkus-rest'
