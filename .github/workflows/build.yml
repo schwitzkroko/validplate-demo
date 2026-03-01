@@ -22,8 +22,8 @@ jobs:
     - name: Make gradlew executable
       run: chmod +x ./gradlew
     
-    - name: Build with Gradle
-      run: ./gradlew build
+    - name: Build with Gradle except mservice
+      run: ./gradlew build -x :mservice:build
     
     - name: Login to GitHub Container Registry
       uses: docker/login-action@v3
@@ -32,16 +32,14 @@ jobs:
         username: ${{ github.actor }}
         password: ${{ secrets.GITHUB_TOKEN }}
     
-    - name: Build and Push Quarkus Container Image
-      run: |
-        cd mservice
-        ../gradlew build \
-          -Dquarkus.container-image.build=true \
-          -Dquarkus.container-image.push=true \
-          -Dquarkus.container-image.registry=ghcr.io \
-          -Dquarkus.container-image.group=${{ github.repository_owner }} \
-          -Dquarkus.container-image.name=validplate-mservice \
-          -Dquarkus.container-image.tag=latest
+    - name: Build with Gradle mservice and Push Quarkus Container Image
+      run: ./gradlew :mservice:build \
+        -Dquarkus.container-image.build=true \
+        -Dquarkus.container-image.push=true \
+        -Dquarkus.container-image.registry=ghcr.io \
+        -Dquarkus.container-image.group=${{ github.repository_owner }} \
+        -Dquarkus.container-image.name=validplate-mservice \
+        -Dquarkus.container-image.tag=latest
     
     # - name: Publish test results
     #   if: always()
