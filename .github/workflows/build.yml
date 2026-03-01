@@ -33,13 +33,14 @@ jobs:
         password: ${{ secrets.GITHUB_TOKEN }}
     
     - name: Build and Push Quarkus Container Image
-      run: ./gradlew :mservice:build \
-        -Dquarkus.container-image.build=true \
-        -Dquarkus.container-image.push=true \
-        -Dquarkus.container-image.registry=ghcr.io \
-        -Dquarkus.container-image.group=${{ github.repository_owner }} \
-        -Dquarkus.container-image.name=validplate-mservice \
-        -Dquarkus.container-image.tag=latest
+      run: |
+        ./gradlew build \
+          -Dquarkus.container-image.build=true \
+          -Dquarkus.container-image.push=true \
+          -Dquarkus.container-image.registry=ghcr.io \
+          -Dquarkus.container-image.group=${{ github.repository_owner }} \
+          -Dquarkus.container-image.name=${{ github.event.repository.name }} \
+          -Dquarkus.container-image.tag=latest
     
     # - name: Publish test results
     #   if: always()
