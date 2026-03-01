@@ -20,9 +20,10 @@ public class ValidationResource {
     @GET
     @Produces(MediaType.TEXT_PLAIN)
     public Response validate(@PathParam("plate") String plate) {
-        return switch (plateService.digest(plate)) {
-            case PlateModel.Valid v   -> Response.ok(v.formatted()).build();
-            case PlateModel.Invalid i -> Response.status(422).build();
+    	
+		return switch (plateService.digest(plate)) {
+            case PlateModel.Valid v   -> Response.ok(v.canonical()).build();
+            case PlateModel.Invalid i -> Response.status(422).entity(i.canonical()).build();
         };
     }
 }

@@ -2,9 +2,15 @@ package net.schwitzkroko.demo.validplate.plate;
 
 public sealed interface PlateModel {
 
+    /** Normalised canonical form, e.g. "LI-IT100". "error for invalid plates. */
+    String canonical();
+
     /** Failed parse — carries no data. */
     record Invalid() implements PlateModel {
         public static final Invalid INSTANCE = new Invalid();
+
+        @Override
+        public String canonical() { return "error"; }
     }
 
     /** Successful parse — the DTO. */
@@ -14,8 +20,8 @@ public sealed interface PlateModel {
             String digits
     ) implements PlateModel {
 
-        /** Normalised canonical form, e.g. "LI-IT100". */
-        public String formatted() {
+        @Override
+        public String canonical() {
             return districtCode + "-" + letters + digits;
         }
     }

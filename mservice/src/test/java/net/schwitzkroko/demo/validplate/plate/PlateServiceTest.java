@@ -50,7 +50,7 @@ class PlateServiceTest {
 
         if (Boolean.TRUE.equals(tc.success())) {
             assertThat(result, instanceOf(PlateModel.Valid.class));
-            String formatted = ((PlateModel.Valid) result).formatted();
+            String formatted = ((PlateModel.Valid) result).canonical();
             log.debug("Formatted plate: '{}'", formatted);
 			String formattedPlateExpected = tc.output();
             log.debug("Formatted plate EXPECTED: '{}'", formatted);
