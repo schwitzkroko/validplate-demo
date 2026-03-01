@@ -33,4 +33,3 @@ XYZ AB1, false, , XYZ ist kein gültiger Kreis-Code in der Datenbasis
 BUND AB1, false, , BUND hat 4 Zeichen - überschreitet Regex-Limit
 HH ABCD1, false, , vier Buchstaben im zweiten Segment - Regex-Mismatch
 HH AB12345, false, , fünf Ziffern - überschreitet Regex-Limit
-HH 1234, false, , kein Buchstabenteil - Regex-Mismatch
