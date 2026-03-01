@@ -1,6 +1,7 @@
 package net.schwitzkroko.demo.validplate.distinct.special;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import net.schwitzkroko.demo.validplate.distinct.DistinctId;
 
 /**
  * Immutable record representing a "Sonderkennzeichen" entry from the CSV.
@@ -11,4 +12,4 @@ public record SpecialRecord(
         @JsonProperty("Typ")                     String type,
         @JsonProperty("Bedeutung")               String meaning,
         @JsonProperty("Zulassungsbehörde")       String authority
-) {}
+) implements DistinctId {}

@@ -1,8 +1,10 @@
 package net.schwitzkroko.demo.validplate.distinct;
 
-import net.schwitzkroko.demo.validplate.distinct.district.DistrictRecord;
-
 public interface DistinctIdService {
 
-	DistrictRecord find(String code);
+    /**
+     * Looks up a code across both district and special plate registries.
+     * Returns the matching {@link DistinctId}, or {@code null} if not found in either.
+     */
+    DistinctId find(String code);
 }
