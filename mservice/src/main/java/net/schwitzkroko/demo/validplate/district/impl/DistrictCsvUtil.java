@@ -11,19 +11,12 @@ import java.util.List;
 
 class DistrictCsvUtil {
 
+  static List<DistrictRecord> parse(String csvResource) throws IOException {
+    CsvMapper mapper = new CsvMapper();
+    CsvSchema schema = CsvSchema.emptySchema().withHeader().withColumnSeparator(',');
 
-    static List<DistrictRecord> parse(String csvResource) throws IOException {
-        CsvMapper mapper = new CsvMapper();
-        CsvSchema schema = CsvSchema.emptySchema()
-                .withHeader()
-                .withColumnSeparator(',');
-
-        try (InputStream is = DistrictCsvUtil.class.getResourceAsStream(csvResource)) {
-            return mapper
-                    .readerFor(DistrictRecord.class)
-                    .with(schema)
-                    .<DistrictRecord>readValues(is)
-                    .readAll();
-        }
+    try (InputStream is = DistrictCsvUtil.class.getResourceAsStream(csvResource)) {
+      return mapper.readerFor(DistrictRecord.class).with(schema).<DistrictRecord>readValues(is).readAll();
     }
+  }
 }

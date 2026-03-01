@@ -10,15 +10,14 @@ import net.schwitzkroko.demo.validplate.distinct.district.DistrictRepo;
 
 class DistrictRepoImpl implements DistrictRepo {
 
-    private final Map<String, DistrictRecord> byCode;
+  private final Map<String, DistrictRecord> byCode;
 
-    DistrictRepoImpl(List<DistrictRecord> records) {
-        this.byCode = records.stream()
-                .collect(Collectors.toMap(DistrictRecord::code, Function.identity()));
-    }
+  DistrictRepoImpl(List<DistrictRecord> records) {
+    this.byCode = records.stream().collect(Collectors.toMap(DistrictRecord::code, Function.identity()));
+  }
 
-    @Override
-    public DistrictRecord findByCode(String code) {
-        return byCode.get(code);
-    }
+  @Override
+  public DistrictRecord findByCode(String code) {
+    return byCode.get(code);
+  }
 }

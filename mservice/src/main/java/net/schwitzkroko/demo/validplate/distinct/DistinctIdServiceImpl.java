@@ -10,28 +10,28 @@ import net.schwitzkroko.demo.validplate.distinct.special.SpecialRepo;
 @ApplicationScoped
 class DistinctIdServiceImpl implements DistinctIdService {
 
-    @Inject
-    DistrictRepo districtRepo;
+  @Inject
+  DistrictRepo districtRepo;
 
-    @Inject
-    SpecialRepo specialRepo;
+  @Inject
+  SpecialRepo specialRepo;
 
-    @Override
-    public DistinctId find(String code) {
-        log.debug("find: code='{}'", code);
+  @Override
+  public DistinctId find(String code) {
+    log.debug("find: code='{}'", code);
 
-        DistinctId result = districtRepo.findByCode(code);
-        if (result != null) {
-            log.debug("find: found in district repo -> {}", result);
-            return result;
-        }
-
-        result = specialRepo.findByCode(code);
-        if (result != null) {
-            log.debug("find: found in special repo -> {}", result);
-        } else {
-            log.debug("find: code='{}' not found in any repo", code);
-        }
-        return result;
+    DistinctId result = districtRepo.findByCode(code);
+    if (result != null) {
+      log.debug("find: found in district repo -> {}", result);
+      return result;
     }
+
+    result = specialRepo.findByCode(code);
+    if (result != null) {
+      log.debug("find: found in special repo -> {}", result);
+    } else {
+      log.debug("find: code='{}' not found in any repo", code);
+    }
+    return result;
+  }
 }

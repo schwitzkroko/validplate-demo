@@ -11,31 +11,20 @@ import java.util.List;
 
 public class PlateTestCaseUtil {
 
+  public static List<PlateTestData> parse(String resource) throws IOException {
+    CsvMapper mapper = new CsvMapper();
+    mapper.enable(CsvParser.Feature.TRIM_SPACES);
+    mapper.enable(CsvParser.Feature.ALLOW_TRAILING_COMMA);
 
-    public static List<PlateTestData> parse(String resource) throws IOException {
-        CsvMapper mapper = new CsvMapper();
-        mapper.enable(CsvParser.Feature.TRIM_SPACES);
-        mapper.enable(CsvParser.Feature.ALLOW_TRAILING_COMMA);
+    CsvSchema schema = CsvSchema.emptySchema().withHeader().withColumnSeparator(',').withNullValue("");
 
-        CsvSchema schema = CsvSchema.emptySchema()
-                .withHeader()
-                .withColumnSeparator(',')
-                .withNullValue("");
-
-        try (InputStream is = PlateTestCaseUtil.class.getResourceAsStream(resource)) {
-            return mapper
-                    .readerFor(PlateTestData.class)
-                    .with(schema)
-                    .<PlateTestData>readValues(is)
-                    .readAll();
-        }
+    try (InputStream is = PlateTestCaseUtil.class.getResourceAsStream(resource)) {
+      return mapper.readerFor(PlateTestData.class).with(schema).<PlateTestData>readValues(is).readAll();
     }
-    
-    public record PlateTestData(
-            @JsonProperty("input")   String input,
-            @JsonProperty("success") Boolean success,
-            @JsonProperty("output")  String output,
-            @JsonProperty("remark")  String remark
-    ) {}
+  }
+
+  public record PlateTestData(@JsonProperty("input") String input, @JsonProperty("success") Boolean success,
+      @JsonProperty("output") String output, @JsonProperty("remark") String remark) {
+  }
 
 }

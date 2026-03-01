@@ -5,9 +5,23 @@
  */
 
 plugins {
-    // Apply the java Plugin to add support for Java.
     id 'java'
+    id 'com.diffplug.spotless'
 }
+
+// ...existing code...
+
+spotless {
+    java {
+        eclipse().configFile(rootProject.file('build-logic/src/main/resources/eclipse-java-formatter.xml'))
+        removeUnusedImports()
+        trimTrailingWhitespace()
+        endWithNewline()
+    }
+    encoding 'UTF-8'
+}
+
+// ...existing code...
 
 repositories {
     // Use Maven Central for resolving dependencies.

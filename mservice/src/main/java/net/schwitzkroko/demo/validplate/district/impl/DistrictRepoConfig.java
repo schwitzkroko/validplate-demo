@@ -12,15 +12,15 @@ import java.io.IOException;
 @ApplicationScoped
 public class DistrictRepoConfig {
 
-    static final String CSV_RESOURCE = "/distinct/kennzeichen.csv";
-	
-    @Produces
-    @ApplicationScoped
-    @Startup
-    DistrictRepo districtRepo() throws IOException {
-        log.info("Loading district data from CSV...");
-        var records = DistrictCsvUtil.parse(CSV_RESOURCE);
-        log.info("Loaded {} district records.", records.size());
-        return new DistrictRepoImpl(records);
-    }
+  static final String CSV_RESOURCE = "/distinct/kennzeichen.csv";
+
+  @Produces
+  @ApplicationScoped
+  @Startup
+  DistrictRepo districtRepo() throws IOException {
+    log.info("Loading district data from CSV...");
+    var records = DistrictCsvUtil.parse(CSV_RESOURCE);
+    log.info("Loaded {} district records.", records.size());
+    return new DistrictRepoImpl(records);
+  }
 }

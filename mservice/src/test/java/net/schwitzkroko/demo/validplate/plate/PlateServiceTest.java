@@ -22,41 +22,39 @@ import static org.hamcrest.Matchers.*;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class PlateServiceTest {
 
-    private static final String CSV_RESOURCE_ORIGINAL = "/aufgabenstellung/original_korrigiert.csv";
+  private static final String CSV_RESOURCE_ORIGINAL = "/aufgabenstellung/original_korrigiert.csv";
 
-	
-    @Inject
-    PlateService plateService;
+  @Inject
+  PlateService plateService;
 
-    private List<PlateTestData> testCasesOriginal;
+  private List<PlateTestData> testCasesOriginal;
 
-    @BeforeAll
-    void loadTestCases() throws IOException {
-        testCasesOriginal = PlateTestCaseUtil.parse(CSV_RESOURCE_ORIGINAL);
-        log.info("Loaded {} test cases from CSV", testCasesOriginal.size());
+  @BeforeAll
+  void loadTestCases() throws IOException {
+    testCasesOriginal = PlateTestCaseUtil.parse(CSV_RESOURCE_ORIGINAL);
+    log.info("Loaded {} test cases from CSV", testCasesOriginal.size());
+  }
+
+  Stream<PlateTestData> testCasesOriginal() {
+    return testCasesOriginal.stream();
+  }
+
+  @ParameterizedTest(name = "[{index}] {0}")
+  @MethodSource("testCasesOriginal")
+  void testDigest(PlateTestData tc) {
+    log.debug("digest: input='{}' expected success={} output='{}'", tc.input(), tc.success(), tc.output());
+
+    PlateModel result = plateService.digest(tc.input());
+
+    if (Boolean.TRUE.equals(tc.success())) {
+      assertThat(result, instanceOf(PlateModel.Valid.class));
+      String formatted = ((PlateModel.Valid) result).canonical();
+      log.debug("Formatted plate: '{}'", formatted);
+      String formattedPlateExpected = tc.output();
+      log.debug("Formatted plate EXPECTED: '{}'", formatted);
+      assertThat(tc.remark(), formatted, equalTo(formattedPlateExpected));
+    } else {
+      assertThat(tc.remark(), result, instanceOf(PlateModel.Invalid.class));
     }
-
-    Stream<PlateTestData> testCasesOriginal() {
-        return testCasesOriginal.stream();
-    }
-
-    @ParameterizedTest(name = "[{index}] {0}")
-    @MethodSource("testCasesOriginal")
-    void testDigest(PlateTestData tc) {
-        log.debug("digest: input='{}' expected success={} output='{}'",
-                tc.input(), tc.success(), tc.output());
-
-        PlateModel result = plateService.digest(tc.input());
-
-        if (Boolean.TRUE.equals(tc.success())) {
-            assertThat(result, instanceOf(PlateModel.Valid.class));
-            String formatted = ((PlateModel.Valid) result).canonical();
-            log.debug("Formatted plate: '{}'", formatted);
-			String formattedPlateExpected = tc.output();
-            log.debug("Formatted plate EXPECTED: '{}'", formatted);
-			assertThat(tc.remark(), formatted, equalTo(formattedPlateExpected));
-        } else {
-            assertThat(tc.remark(), result, instanceOf(PlateModel.Invalid.class));
-        }
-    }
+  }
 }
