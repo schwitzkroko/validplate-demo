@@ -48,8 +48,8 @@ jobs:
           -Dquarkus.container-image.name=${{ github.event.repository.name }} \
           -Dquarkus.container-image.tag=latest
 
-    - name: Publish test results
-      if: always()
-      uses: EnricoMi/publish-unit-test-result-action@v2
-      with:
-        files: '**/build/test-results/**/*.xml'
+    # - name: Publish test results
+    #   if: always()
+    #   uses: EnricoMi/publish-unit-test-result-action@v2
+    #   with:
+    #     files: '**/build/test-results/**/*.xml'

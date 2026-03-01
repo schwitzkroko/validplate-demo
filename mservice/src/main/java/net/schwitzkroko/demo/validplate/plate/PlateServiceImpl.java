@@ -10,6 +10,11 @@ import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.StringUtils;
 
+/**
+ * Implementation of PlateService that parses and validates plate strings.
+ * Reaches out to DistinctIdService to validate the "Unterscheidungszeichen"
+ * code part of the plate.
+ */
 @ApplicationScoped
 @Slf4j
 class PlateServiceImpl implements PlateService {
