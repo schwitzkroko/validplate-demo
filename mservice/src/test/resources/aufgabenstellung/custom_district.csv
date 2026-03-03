@@ -29,11 +29,13 @@ WI OP9, 200, WI-OP9, Wiesbaden
 WÜ QR10, 200, WÜ-QR10, Würzburg - Umlaut im Unterscheidungszeichen
 b ab1234, 200, B-AB1234, Kleinbuchstaben werden zu Großbuchstaben normalisiert
  HH AB123 , 200, HH-AB123, führende/nachfolgende Leerzeichen werden getrimmt
-XYZ AB1, 404, error, XYZ ist kein gültiger Kreis-Code in der Datenbasis
+XYZ AB1, 404, error, XYZ ist kein gültiger Kreis-Code in den Daten
 BUND AB1, 422, error, BUND hat 4 Zeichen - überschreitet Regex-Limit
 HH ABCD1, 422, error, vier Buchstaben im zweiten Segment - Regex-Mismatch
 HH AB12345, 422, error, fünf Ziffern - überschreitet Regex-Limit
 LMIT 130, 200, LM-IT130, da alle Bestandteile eindeutig differenzierbar
 WEBIT 42, 404, error, da Bestandteile nicht eindeutig und nicht valide - WEB ist kein gültiger Kreis-Code
 WEIT 42, 200, WE-IT42, da alle Bestandteile eindeutig differenzierbar
+B-XAY 1234, 422, error, da Bestandteile nicht nicht valide - Erkennungszeichen hat 3 Lettern
+BXAY 1234, 404, error, da Bestandteile nicht eindeutig und nicht valide
 , 422, error, input ist blank

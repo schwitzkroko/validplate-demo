@@ -12,9 +12,9 @@ class PlateMatcherUtil {
 
   /**
    * Unambiguous: explicit '-' separator present after normalisation. Group 1 =
-   * district code (1–3 letters), group 2 = letters (1–3), group 3 = digits (1–4).
+   * district code (1–3 letters), group 2 = letters (1–2), group 3 = digits (1–4).
    */
-  static final Pattern PLATE_PATTERN_SEPARATED = Pattern.compile("^([A-ZÄÖÜ]{1,3})-([A-Z]{1,3})(\\d{1,4})$");
+  static final Pattern PLATE_PATTERN_SEPARATED = Pattern.compile("^([A-ZÄÖÜ]{1,3})-([A-Z]{1,2})(\\d{1,4})$");
 
   /**
    * Ambiguous: no separator. All leading letters go into group 1 so the whole

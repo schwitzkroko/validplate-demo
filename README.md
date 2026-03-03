@@ -46,11 +46,10 @@ Valide Kennzeichen werden in die Normalform überführt:
 ```
 GET /validplate/validate/{plate}
 
-200 OK								→ kanonisches Kennzeichen (z.B. "B-AB1234")
-422 Unprocessable Content	→ "error" (strukturell oder geografisch ungültig)
+200 OK                    → kanonisches Kennzeichen (z.B. "B-AB1234")
+422 Unprocessable Content → "error" (strukturell ungültig)
+404 Not Found             → "error" (geografisch ungültig oder uneindeutig)
 ```
-
-❌ Idee (Noch nicht implementiert): Unterschedidung zwischen (422) strukturell ungültig und (404) geografisch ungültig. 
 
 
 ---
@@ -89,15 +88,6 @@ Prüflogik: Monatswerte 01–12, Mindestdauer 2 Monate, Maximaldauer 11 Monate.
 
 OCR-basierte Validierung von Schriftart, Abmessungen und Euro-Balken.  -->
 
-### Known Bugs
-
-TODO Ebenfalls noch nicht implementiert: kein Buchstabenteil bzw alphabetische Bestandteile nicht eindeutig differenzierbar, ex:
-
-- `LIIT 100` (reinstate original testcase!) UKZ Lindau-2Erkennungsbuchstaben-3digits 
-- `HH 1234` -> `H-H1234` UKZ Hannover-Erkennungsbuchstabe 4digits 
-
-Gebenenfalls spezielles pre-parsing mit Regex und Versuch von search ahead in UKZ-Quellen.
-
 
 ---
 
@@ -130,9 +120,9 @@ Parametrisierte Tests lesen Testfälle aus CSV-Dateien unter `src/test/resources
 
 | Datei | Inhalt |
 |---|---|
-| `original_korrigiert.csv` | Ursprüngliche Aufgabenstellung (PlateServiceTest) |
-| `custom_district.csv` | Erweiterte Testfälle für Kreiskennzeichen |
-| `custom_sonder.csv` | Erweiterte Testfälle für Sonderkennzeichen |
+| `original.csv` | Ursprüngliche Aufgabenstellung (PlateServiceTest) |
+| `custom_district.csv` | Erweiterte Testfälle für ("district") Kreiskennzeichen |
+| `custom_sonder.csv` | Erweiterte Testfälle für ("special") Sonderkennzeichen |
 
 ---
 
@@ -151,7 +141,7 @@ Parametrisierte Tests lesen Testfälle aus CSV-Dateien unter `src/test/resources
   -Dquarkus.container-image.push=false
 ```
 
-Swagger UI (auch im Prod-Profil): http://localhost:9040/q/swagger-ui/
+Swagger UI (auch im Prod-Profil): http://localhost:9040/swagger-ui/
 
 ---
 
