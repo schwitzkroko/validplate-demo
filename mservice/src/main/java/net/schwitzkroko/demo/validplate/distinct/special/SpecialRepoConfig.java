@@ -1,11 +1,10 @@
-package net.schwitzkroko.demo.validplate.distinct.special.impl;
+package net.schwitzkroko.demo.validplate.distinct.special;
 
 import io.quarkus.runtime.Startup;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.inject.Produces;
 import lombok.extern.slf4j.Slf4j;
-import net.schwitzkroko.demo.validplate.distinct.special.SpecialRecord;
-import net.schwitzkroko.demo.validplate.distinct.special.SpecialRepo;
+import net.schwitzkroko.demo.validplate.distinct.DistinctId;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -30,12 +29,13 @@ public class SpecialRepoConfig {
     return new SpecialRepoImpl(records);
   }
 
-  static List<SpecialRecord> parse(String csvResource) throws IOException {
+  static List<DistinctId.SpecialRecord> parse(String csvResource) throws IOException {
     CsvMapper mapper = new CsvMapper();
     CsvSchema schema = CsvSchema.emptySchema().withHeader().withColumnSeparator(',').withQuoteChar('"');
 
     try (InputStream is = SpecialRepoConfig.class.getResourceAsStream(csvResource)) {
-      return mapper.readerFor(SpecialRecord.class).with(schema).<SpecialRecord>readValues(is).readAll();
+      return mapper.readerFor(DistinctId.SpecialRecord.class).with(schema).<DistinctId.SpecialRecord>readValues(is)
+          .readAll();
     }
   }
 }

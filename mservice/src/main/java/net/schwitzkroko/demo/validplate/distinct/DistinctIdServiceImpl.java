@@ -1,5 +1,9 @@
 package net.schwitzkroko.demo.validplate.distinct;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Stream;
+
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
@@ -17,21 +21,25 @@ class DistinctIdServiceImpl implements DistinctIdService {
   SpecialRepo specialRepo;
 
   @Override
-  public DistinctId find(String code) {
+  public List<DistinctId> find(String code) {
     log.debug("find: code='{}'", code);
 
-    DistinctId result = districtRepo.findByCode(code);
-    if (result != null) {
-      log.debug("find: found in district repo -> {}", result);
-      return result;
-    }
+    List<DistinctId> result = Stream
+        .concat(districtRepo.findByCode(code).stream(), specialRepo.findByCode(code).stream())
+        .map(DistinctId.class::cast).toList();
 
-    result = specialRepo.findByCode(code);
-    if (result != null) {
-      log.debug("find: found in special repo -> {}", result);
-    } else {
-      log.debug("find: code='{}' not found in any repo", code);
-    }
+    log.debug("find: code='{}' -> {} result(s)", code, result.size());
     return result;
   }
+
+  @Override
+  public List<DistinctId> findForAny(String... codes) {
+    log.debug("findForAny: codes='{}'", Arrays.toString(codes));
+
+    List<DistinctId> result = Stream.of(codes).flatMap(code -> find(code).stream()).toList();
+
+    log.debug("findForAny: -> {} result(s)", result.size());
+    return result;
+  }
+
 }

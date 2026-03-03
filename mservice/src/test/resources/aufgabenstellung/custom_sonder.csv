@@ -1,32 +1,32 @@
-input, success, output, remark
-THW AB26, true, THW-AB26, Technisches Hilfswerk - valides Sonderkennzeichen
-THW-AB 26, true, THW-AB26, THW mit Bindestrich und Leerzeichen - normalisiert identisch
-Y AB1234, true, Y-AB1234, Bundeswehr (einbuchstabiger Code) - valides Sonderkennzeichen
-Y-AB 1234, true, Y-AB1234, Bundeswehr mit Bindestrich und Leerzeichen - normalisiert identisch
-X CD99, true, X-CD99, NATO-Hauptquartier - valides Sonderkennzeichen
-BD A1, true, BD-A1, Bundesdienstwagen (Bundestag/Bundesrat) - minimale Ziffernlänge
-BD-A 1, true, BD-A1, Bundesdienstwagen mit Trennzeichen - normalisiert identisch
-BP XY100, true, BP-XY100, Bundespolizei - valides Sonderkennzeichen
-BG MN55, true, BG-MN55, Bundesgrenzschutz (historisch noch gültig) - valides Sonderkennzeichen
-BW EF3, true, BW-EF3, Wasserstraßen- und Schifffahrtsverwaltung - valides Sonderkennzeichen
-NRW CD789, true, NRW-CD789, NRW Landespolizei/Regierung - dreistelliger Sonderkode
-BWL AB12, true, BWL-AB12, Baden-Württemberg Landespolizei - dreistelliger Sonderkode
-BYL GH9, true, BYL-GH9, Bayern Landesregierung - dreistelliger Sonderkode
-BBL RS42, true, BBL-RS42, Brandenburg Landesregierung/Polizei - dreistelliger Sonderkode
-HEL UV7, true, HEL-UV7, Hessen Landesregierung - dreistelliger Sonderkode
-LSA WX1, true, LSA-WX1, Sachsen-Anhalt Landesregierung - dreistelliger Sonderkode
-LSN YZ8, true, LSN-YZ8, Sachsen Landesregierung - dreistelliger Sonderkode
-MVL AB333, true, MVL-AB333, Mecklenburg-Vorpommern - vierstellige Ziffern
-RPL CD22, true, RPL-CD22, Rheinland-Pfalz Landesregierung - dreistelliger Sonderkode
-SAL EF5, true, SAL-EF5, Saarland Landesregierung - dreistelliger Sonderkode
-THL GH6, true, THL-GH6, Thüringen Landesregierung - dreistelliger Sonderkode
-BN IJ77, true, BN-IJ77, Diplomatisches Kennzeichen Bonn - valides Sonderkennzeichen
-thw ab26, true, THW-AB26, Kleinbuchstaben werden normalisiert (uppercase)
- THW AB26 , true, THW-AB26, führende/nachfolgende Leerzeichen werden getrimmt
-POL AB1, false, , POL ist kein gültiger Sonderkode in der Datenbasis
-POLIZEI A1, false, , mehr als 3 Zeichen im ersten Segment - kein Match gegen Regex
-BUND AB1, false, , BUND hat 4 Zeichen - überschreitet Regex-Limit für Unterscheidungszeichen
-Y 1234, false, , kein Buchstabenteil zwischen Sonderkode und Ziffern - Regex-Mismatch
-THW ABCD1, false, , vier Buchstaben im zweiten Segment - überschreitet Regex-Limit
-THW AB12345, false, , fünf Ziffern - überschreitet Regex-Limit von max. 4 Ziffern
-, false, , input ist blank
+input, httpCode, output, remark
+THW AB26, 200, THW-AB26, Technisches Hilfswerk - valides Sonderkennzeichen
+THW-AB 26, 200, THW-AB26, THW mit Bindestrich und Leerzeichen - normalisiert identisch
+Y AB1234, 200, Y-AB1234, Bundeswehr (einbuchstabiger Code) - valides Sonderkennzeichen
+Y-AB 1234, 200, Y-AB1234, Bundeswehr mit Bindestrich und Leerzeichen - normalisiert identisch
+X CD99, 200, X-CD99, NATO-Hauptquartier - valides Sonderkennzeichen
+BD A1, 200, BD-A1, Bundesdienstwagen (Bundestag/Bundesrat) - minimale Ziffernlänge
+BD-A 1, 200, BD-A1, Bundesdienstwagen mit Trennzeichen - normalisiert identisch
+BP XY100, 200, BP-XY100, Bundespolizei - valides Sonderkennzeichen
+BG MN55, 200, BG-MN55, Bundesgrenzschutz (historisch noch gültig) - valides Sonderkennzeichen
+BW EF3, 200, BW-EF3, Wasserstraßen- und Schifffahrtsverwaltung - valides Sonderkennzeichen
+NRW CD789, 200, NRW-CD789, NRW Landespolizei/Regierung - dreistelliger Sonderkode
+BWL AB12, 200, BWL-AB12, Baden-Württemberg Landespolizei - dreistelliger Sonderkode
+BYL GH9, 200, BYL-GH9, Bayern Landesregierung - dreistelliger Sonderkode
+BBL RS42, 200, BBL-RS42, Brandenburg Landesregierung/Polizei - dreistelliger Sonderkode
+HEL UV7, 200, HEL-UV7, Hessen Landesregierung - dreistelliger Sonderkode
+LSA WX1, 200, LSA-WX1, Sachsen-Anhalt Landesregierung - dreistelliger Sonderkode
+LSN YZ8, 200, LSN-YZ8, Sachsen Landesregierung - dreistelliger Sonderkode
+MVL AB333, 200, MVL-AB333, Mecklenburg-Vorpommern - vierstellige Ziffern
+RPL CD22, 200, RPL-CD22, Rheinland-Pfalz Landesregierung - dreistelliger Sonderkode
+SAL EF5, 200, SAL-EF5, Saarland Landesregierung - dreistelliger Sonderkode
+THL GH6, 200, THL-GH6, Thüringen Landesregierung - dreistelliger Sonderkode
+BN IJ77, 200, BN-IJ77, Diplomatisches Kennzeichen Bonn - valides Sonderkennzeichen
+thw ab26, 200, THW-AB26, Kleinbuchstaben werden normalisiert (uppercase)
+ THW AB26 , 200, THW-AB26, führende/nachfolgende Leerzeichen werden getrimmt
+POL AB1, 404, error, POL ist kein gültiger Sonderkode in der Datenbasis
+POLIZEI A1, 422, error, mehr als 3 Zeichen im ersten Segment - kein Match gegen Regex
+BUND AB1, 422, error, BUND hat 4 Zeichen - überschreitet Regex-Limit für Unterscheidungszeichen
+Y 1234, 200, Y-1234, Bundeswehr ohne Buchstabenteil - PLATE_PATTERN_UNSEPARATED matched Y als Kode
+THW ABCD1, 422, error, vier Buchstaben im zweiten Segment - überschreitet Regex-Limit
+THW AB12345, 422, error, fünf Ziffern - überschreitet Regex-Limit von max. 4 Ziffern
+, 422, error, input ist blank

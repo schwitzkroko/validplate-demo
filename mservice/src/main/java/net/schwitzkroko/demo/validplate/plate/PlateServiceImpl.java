@@ -1,14 +1,18 @@
 package net.schwitzkroko.demo.validplate.plate;
 
+import static net.schwitzkroko.demo.validplate.plate.PlateMatcherUtil.*;
+
+import java.util.Arrays;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
+import net.schwitzkroko.demo.validplate.distinct.DistinctId;
 import net.schwitzkroko.demo.validplate.distinct.DistinctIdService;
-
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import org.apache.commons.lang3.StringUtils;
+import net.schwitzkroko.demo.validplate.plate.PlateModel.Ambiguous;
 
 /**
  * Implementation of PlateService that parses and validates plate strings.
@@ -19,56 +23,121 @@ import org.apache.commons.lang3.StringUtils;
 @Slf4j
 class PlateServiceImpl implements PlateService {
 
-  /**
-   * Matches a fully normalised plate string (no spaces, uppercase). A hyphen
-   * between district code and letters is optional because the normalisation step
-   * already canonicalises both '-' and ' ' separators. district code : 1–3
-   * uppercase letters (e.g. LI, AA, B) optional hyphen: literal '-' (already
-   * inserted by normalisation) letters part : 1–3 uppercase letters (e.g. IT, AB)
-   * digits part : 1–4 digits (e.g. 100, 1)
-   *
-   * Group 1 = district code, group 2 = letters, group 3 = digits
-   */
-  private static final Pattern PLATE_PATTERN = Pattern.compile("^([A-ZÄÖÜ]{1,3})-?([A-Z]{1,3})(\\d{1,4})$");
-
   @Inject
   DistinctIdService distinctIdService;
 
   @Override
   public PlateModel digest(String plate) {
-    if (StringUtils.isBlank(plate)) {
+
+    if (plate == null || plate.isBlank()) {
       log.debug("digest: blank input");
-      return PlateModel.Invalid.INSTANCE;
+      return PlateModel.Unparsable.INSTANCE;
     }
 
-    // Normalise: trim, uppercase, then canonicalise the separator between
-    // district code and the letter/digit part.
-    // A hyphen or whitespace between two letter-groups is treated as the
-    // canonical '-' separator; all remaining whitespace is then removed.
-    // Examples:
-    // "LI-IT 100" -> "LI-IT100"
-    // "LI IT100" -> "LI-IT100" (space as separator)
-    // "LIIT 100" -> "LIIT100" (no separator — may be ambiguous)
-    String normalised = plate.strip().toUpperCase().replaceAll("([A-ZÄÖÜ]{1,3})[\\s-]+([A-Z])", "$1-$2")
-        .replaceAll("\\s+", "");
-    log.debug("digest: normalised='{}' from input='{}'", normalised, plate);
+    String normalized = normalize(plate);
 
-    Matcher m = PLATE_PATTERN.matcher(normalised);
-    if (!m.matches()) {
-      log.debug("digest: '{}' does not match plate pattern", normalised);
-      return PlateModel.Invalid.INSTANCE;
-    }
+    PlateModel plateModelParsed = parse(normalized);
 
-    String districtCode = m.group(1);
-    String letters = m.group(2);
-    String digits = m.group(3);
+    return switch (plateModelParsed) {
 
-    if (distinctIdService.find(districtCode) == null) {
-      log.debug("digest: district code '{}' not found in repo", districtCode);
-      return PlateModel.Invalid.INSTANCE;
-    }
+      case PlateModel.Unparsable u -> {
+        log.debug("digest: '{}' could not be parsed", normalized);
+        yield u;
+      }
 
-    log.debug("digest: valid plate district='{}' letters='{}' digits='{}'", districtCode, letters, digits);
-    return new PlateModel.Valid(districtCode, letters, digits);
+      case PlateModel.Invalid i -> {
+        log.debug("digest: '{}' did not match any plate pattern", normalized);
+        yield i;
+      }
+
+      case PlateModel.Valid d when distinctIdService.find(d.distinctCode()).isEmpty() -> {
+        log.debug("digest: district code '{}' not found in repo", d.distinctCode());
+        yield PlateModel.Invalid.INSTANCE;
+      }
+
+      case PlateModel.Ambiguous a -> resolveAmbuiguity(a);
+
+      case PlateModel.Valid d -> {
+        log.debug("digest: valid plate -> {}", d);
+        yield d;
+      }
+    };
   }
+
+  private PlateModel resolveAmbuiguity(Ambiguous a) {
+
+    Map<String, String> candidateMap = resolveIntoCandidates(a);
+    String[] distinctCodeCandiates = candidateMap.keySet().toArray(new String[0]);
+    List<DistinctId> knownCandidates = distinctIdService.findForAny(distinctCodeCandiates);
+
+    if (knownCandidates.isEmpty()) {
+
+      log.debug("digest: no known distinct code candidates found for candidates '{}'",
+          Arrays.toString(distinctCodeCandiates));
+      return PlateModel.Invalid.INSTANCE;
+
+    } else if (knownCandidates.size() > 1) {
+
+      // stays ambiguous if multiple candidates are known, as we cannot decide which
+      // one is correct
+      log.debug("digest: found multiple known distinct code candidates for '{}': {}", a.distinctCode(),
+          knownCandidates);
+      return a;
+
+    } else {
+
+      DistinctId knownDistinctId = knownCandidates.get(0);
+      String letters = candidateMap.get(knownDistinctId.code());
+
+      return switch (knownDistinctId) {
+
+        case DistinctId.DistrictRecord dr -> {
+          log.debug("digest: resolved ambiguous '{}' to district record '{}'", a.distinctCode(), dr.toDisplayString());
+
+          // no district KBA plate allowed without letters, so if the resolved district
+          // code candidate has no letters left, the plate is invalid
+          if (letters.isEmpty()) {
+            log.debug("digest: resolved letters part is empty for district plate of '{}', invalid plate",
+                a.distinctCode());
+            yield PlateModel.Invalid.INSTANCE;
+          }
+          yield new PlateModel.Valid(dr.code(), letters, a.digits());
+        }
+
+        // special plates may be valid even without letters, so we don't check for empty
+        // letters here
+        // FIX: root cause is that special plates have been fallen under ambiguous
+        // parsing in the first place
+        case DistinctId.SpecialRecord sr -> {
+
+          PlateModel.Valid validSpecial = new PlateModel.Valid(sr.code(), letters, a.digits());
+
+          log.debug("digest: resolved ambiguous '{}' to special plate '{}' ({}), letters rest: '{}'", a.distinctCode(),
+              validSpecial.canonical());
+          yield validSpecial;
+        }
+      };
+    }
+  }
+
+  private Map<String, String> resolveIntoCandidates(PlateModel.Ambiguous a) {
+
+    String ambiguousDistinctCode = a.distinctCode();
+    int len = ambiguousDistinctCode.length();
+
+    // LinkedHashMap preserves insertion order (longest candidate first)
+    Map<String, String> candidateMap = new LinkedHashMap<>(len);
+    for (int cut = 0; cut < len; cut++) {
+      String candidate = ambiguousDistinctCode.substring(0, len - cut);
+      String rest = ambiguousDistinctCode.substring(len - cut);
+
+      // more than 2 letters in "Erkennungsnummer" part disqualifies the candidate
+      if (rest.length() <= 2)
+        candidateMap.put(candidate, rest);
+    }
+
+    log.debug("resolveIntoCandidates: resolved '{}' into candidates '{}'", ambiguousDistinctCode, candidateMap);
+    return candidateMap;
+  }
+
 }

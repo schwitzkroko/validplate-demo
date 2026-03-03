@@ -1,35 +1,39 @@
-input, success, output, remark
-B AB1234, true, B-AB1234, Berlin - einbuchstabiger Code mit max. Ziffernlänge
-B-AB 1234, true, B-AB1234, Berlin mit Bindestrich und Leerzeichen - normalisiert identisch
-M XY99, true, M-XY99, München - einbuchstabiger Code
-HH AB123, true, HH-AB123, Hamburg zweistellig
-HH-AB 123, true, HH-AB123, Hamburg mit Bindestrich - normalisiert identisch
-K RS7, true, K-RS7, Köln - einbuchstabige Unterscheidung
-F UV42, true, F-UV42, Frankfurt am Main
-S CD8, true, S-CD8, Stuttgart
-DD EF5, true, DD-EF5, Dresden
-L GH9, true, L-GH9, Leipzig
-AC IJ3, true, AC-IJ3, Aachen
-AA KL22, true, AA-KL22, Ostalbkreis (Aalen)
-AB MN1, true, AB-MN1, Aschaffenburg
-MIL OP6, true, MIL-OP6, Main-Tauber-Kreis (Mergentheim)
-KL QR77, true, KL-QR77, Kaiserslautern
-BO ST4, true, BO-ST4, Bochum
-DO UV8, true, DO-UV8, Dortmund
-DU WX55, true, DU-WX55, Duisburg
-E YZ1, true, E-YZ1, Essen
-GE AB2, true, GE-AB2, Gelsenkirchen
-MS CD3, true, MS-CD3, Münster
-N EF4, true, N-EF4, Nürnberg
-NU GH5, true, NU-GH5, Neu-Ulm
-OG IJ6, true, OG-IJ6, Ortenaukreis
-RE KL7, true, RE-KL7, Recklinghausen
-RO MN8, true, RO-MN8, Rosenheim
-WI OP9, true, WI-OP9, Wiesbaden
-WÜ QR10, true, WÜ-QR10, Würzburg - Umlaut im Unterscheidungszeichen
-b ab1234, true, B-AB1234, Kleinbuchstaben werden zu Großbuchstaben normalisiert
- HH AB123 , true, HH-AB123, führende/nachfolgende Leerzeichen werden getrimmt
-XYZ AB1, false, , XYZ ist kein gültiger Kreis-Code in der Datenbasis
-BUND AB1, false, , BUND hat 4 Zeichen - überschreitet Regex-Limit
-HH ABCD1, false, , vier Buchstaben im zweiten Segment - Regex-Mismatch
-HH AB12345, false, , fünf Ziffern - überschreitet Regex-Limit
+input, httpCode, output, remark
+B AB1234, 200, B-AB1234, Berlin - einbuchstabiger Code mit max. Ziffernlänge
+B-AB 1234, 200, B-AB1234, Berlin mit Bindestrich und Leerzeichen - normalisiert identisch
+M XY99, 200, M-XY99, München - einbuchstabiger Code
+HH AB123, 200, HH-AB123, Hamburg zweistellig
+HH-AB 123, 200, HH-AB123, Hamburg mit Bindestrich - normalisiert identisch
+K RS7, 200, K-RS7, Köln - einbuchstabige Unterscheidung
+F UV42, 200, F-UV42, Frankfurt am Main
+S CD8, 200, S-CD8, Stuttgart
+DD EF5, 200, DD-EF5, Dresden
+L GH9, 200, L-GH9, Leipzig
+AC IJ3, 200, AC-IJ3, Aachen
+AA KL22, 200, AA-KL22, Ostalbkreis (Aalen)
+AB MN1, 200, AB-MN1, Aschaffenburg
+MIL OP6, 200, MIL-OP6, Main-Tauber-Kreis (Mergentheim)
+KL QR77, 200, KL-QR77, Kaiserslautern
+BO ST4, 200, BO-ST4, Bochum
+DO UV8, 200, DO-UV8, Dortmund
+DU WX55, 200, DU-WX55, Duisburg
+E YZ1, 200, E-YZ1, Essen
+GE AB2, 200, GE-AB2, Gelsenkirchen
+MS CD3, 200, MS-CD3, Münster
+N EF4, 200, N-EF4, Nürnberg
+NU GH5, 200, NU-GH5, Neu-Ulm
+OG IJ6, 200, OG-IJ6, Ortenaukreis
+RE KL7, 200, RE-KL7, Recklinghausen
+RO MN8, 200, RO-MN8, Rosenheim
+WI OP9, 200, WI-OP9, Wiesbaden
+WÜ QR10, 200, WÜ-QR10, Würzburg - Umlaut im Unterscheidungszeichen
+b ab1234, 200, B-AB1234, Kleinbuchstaben werden zu Großbuchstaben normalisiert
+ HH AB123 , 200, HH-AB123, führende/nachfolgende Leerzeichen werden getrimmt
+XYZ AB1, 404, error, XYZ ist kein gültiger Kreis-Code in der Datenbasis
+BUND AB1, 422, error, BUND hat 4 Zeichen - überschreitet Regex-Limit
+HH ABCD1, 422, error, vier Buchstaben im zweiten Segment - Regex-Mismatch
+HH AB12345, 422, error, fünf Ziffern - überschreitet Regex-Limit
+LMIT 130, 200, LM-IT130, da alle Bestandteile eindeutig differenzierbar
+WEBIT 42, 404, error, da Bestandteile nicht eindeutig und nicht valide - WEB ist kein gültiger Kreis-Code
+WEIT 42, 200, WE-IT42, da alle Bestandteile eindeutig differenzierbar
+, 422, error, input ist blank

@@ -23,7 +23,7 @@ import static org.hamcrest.CoreMatchers.is;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class ValidationResourceTest {
 
-  static final String CSV_RESOURCE_ORIGINAL = "/aufgabenstellung/original_korrigiert.csv";
+  static final String CSV_RESOURCE_ORIGINAL = "/aufgabenstellung/original.csv";
   static final String CSV_RESOURCE_DISTRICT = "/aufgabenstellung/custom_district.csv";
   static final String CSV_RESOURCE_SPECIAL = "/aufgabenstellung/custom_sonder.csv";
 
@@ -49,16 +49,10 @@ class ValidationResourceTest {
 
   @ParameterizedTest(name = "[{index}] {0}")
   @MethodSource("testCasesOriginal")
-  void tesWithTestCasesOriginal(PlateTestData tc) {
-    log.debug("validate: input='{}' expected success={} output='{}'", tc.input(), tc.success(), tc.output());
+  void testWithTestCasesOriginal(PlateTestData tc) {
+    log.debug("validate: input='{}' expected httpCode={} output='{}'", tc.input(), tc.httpCode(), tc.output());
 
-    var spec = given().when().get("/validate/" + tc.input()).then();
-
-    if (Boolean.TRUE.equals(tc.success())) {
-      spec.statusCode(200).body(is(tc.output()));
-    } else {
-      spec.statusCode(422);
-    }
+    given().when().get("/validate/" + tc.input()).then().statusCode(tc.httpCode()).body(is(tc.output()));
   }
 
   Stream<PlateTestData> testCasesDistrictCustom() {
@@ -70,15 +64,9 @@ class ValidationResourceTest {
   @ParameterizedTest(name = "[{index}] {0}")
   @MethodSource("testCasesDistrictCustom")
   void tesWithTestCasesDistrictCustom(PlateTestData tc) {
-    log.debug("validate: input='{}' expected success={} output='{}'", tc.input(), tc.success(), tc.output());
+    log.debug("validate: input='{}' expected httpCode={} output='{}'", tc.input(), tc.httpCode(), tc.output());
 
-    var spec = given().when().get("/validate/" + tc.input()).then();
-
-    if (Boolean.TRUE.equals(tc.success())) {
-      spec.statusCode(200).body(is(tc.output()));
-    } else {
-      spec.statusCode(422);
-    }
+    given().when().get("/validate/" + tc.input()).then().statusCode(tc.httpCode()).body(is(tc.output()));
   }
 
   Stream<PlateTestData> testCasesSpecialCustom() {
@@ -90,14 +78,8 @@ class ValidationResourceTest {
   @ParameterizedTest(name = "[{index}] {0}")
   @MethodSource("testCasesSpecialCustom")
   void tesWithTestCasesSpecialCustom(PlateTestData tc) {
-    log.debug("validate: input='{}' expected success={} output='{}'", tc.input(), tc.success(), tc.output());
+    log.debug("validate: input='{}' expected httpCode={} output='{}'", tc.input(), tc.httpCode(), tc.output());
 
-    var spec = given().when().get("/validate/" + tc.input()).then();
-
-    if (Boolean.TRUE.equals(tc.success())) {
-      spec.statusCode(200).body(is(tc.output()));
-    } else {
-      spec.statusCode(422);
-    }
+    given().when().get("/validate/" + tc.input()).then().statusCode(tc.httpCode()).body(is(tc.output()));
   }
 }

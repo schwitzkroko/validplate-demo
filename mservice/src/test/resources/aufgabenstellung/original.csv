@@ -1,6 +1,6 @@
-input, success, output, remark
-LIIT 100, true, LI-IT100, da alle Bestandteile eindeutig differenzierbar
-HalloWelt!, false, , da Bestandteile nicht eindeutig und nicht valide
-LI-IT 100, true, LI-IT100, da alle Bestandteile eindeutig differenzierbar
-LIT 100, false, , da Bestandteile nicht eindeutig und nicht valide
-, false, , input ist blank
+input, httpCode, output, remark
+LIIT 100, 200, LI-IT100, da alle Bestandteile eindeutig differenzierbar
+HalloWelt!, 422, error, da Bestandteile nicht eindeutig und nicht valide
+LI-IT 100, 200, LI-IT100, da alle Bestandteile eindeutig differenzierbar
+LIT 100, 404, error, da Bestandteile nicht eindeutig und nicht valide
+, 422, error, input ist blank

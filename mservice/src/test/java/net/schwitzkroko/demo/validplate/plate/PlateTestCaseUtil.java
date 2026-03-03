@@ -23,7 +23,7 @@ public class PlateTestCaseUtil {
     }
   }
 
-  public record PlateTestData(@JsonProperty("input") String input, @JsonProperty("success") Boolean success,
+  public record PlateTestData(@JsonProperty("input") String input, @JsonProperty("httpCode") Integer httpCode,
       @JsonProperty("output") String output, @JsonProperty("remark") String remark) {
   }
 

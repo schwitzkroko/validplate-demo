@@ -23,7 +23,9 @@ public class ValidationResource {
 
     return switch (plateService.digest(plate)) {
       case PlateModel.Valid v -> Response.ok(v.canonical()).build();
-      case PlateModel.Invalid i -> Response.status(422).entity(i.canonical()).build();
+      case PlateModel.Ambiguous a -> Response.status(404).entity(PlateModel.Invalid.INSTANCE.canonical()).build();
+      case PlateModel.Invalid i -> Response.status(404).entity(i.canonical()).build();
+      case PlateModel.Unparsable i -> Response.status(422).entity(i.canonical()).build();
     };
   }
 }

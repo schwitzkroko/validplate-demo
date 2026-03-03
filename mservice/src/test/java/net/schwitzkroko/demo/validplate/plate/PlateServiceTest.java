@@ -22,7 +22,7 @@ import static org.hamcrest.Matchers.*;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class PlateServiceTest {
 
-  private static final String CSV_RESOURCE_ORIGINAL = "/aufgabenstellung/original_korrigiert.csv";
+  private static final String CSV_RESOURCE_ORIGINAL = "/aufgabenstellung/original.csv";
 
   @Inject
   PlateService plateService;
@@ -42,19 +42,27 @@ class PlateServiceTest {
   @ParameterizedTest(name = "[{index}] {0}")
   @MethodSource("testCasesOriginal")
   void testDigest(PlateTestData tc) {
-    log.debug("digest: input='{}' expected success={} output='{}'", tc.input(), tc.success(), tc.output());
+    log.debug("digest: input='{}' expected httpCode={} output='{}'", tc.input(), tc.httpCode(), tc.output());
 
     PlateModel result = plateService.digest(tc.input());
 
-    if (Boolean.TRUE.equals(tc.success())) {
+    if (tc.httpCode() == 200) {
+
       assertThat(result, instanceOf(PlateModel.Valid.class));
-      String formatted = ((PlateModel.Valid) result).canonical();
-      log.debug("Formatted plate: '{}'", formatted);
-      String formattedPlateExpected = tc.output();
-      log.debug("Formatted plate EXPECTED: '{}'", formatted);
-      assertThat(tc.remark(), formatted, equalTo(formattedPlateExpected));
+      assertThat(tc.remark(), result.canonical(), equalTo(tc.output()));
+
+    } else if (tc.httpCode() == 404) {
+
+      assertThat(result, anyOf(instanceOf(PlateModel.Invalid.class), instanceOf(PlateModel.Ambiguous.class)));
+
+      switch (result) {
+        case PlateModel.Invalid i -> assertThat(tc.remark(), i.canonical(), equalTo("error"));
+        case PlateModel.Ambiguous a -> assertThat(tc.remark(), a.canonical(), not(emptyOrNullString()));
+        default -> throw new IllegalArgumentException("Unexpected value: " + result);
+      }
+
     } else {
-      assertThat(tc.remark(), result, instanceOf(PlateModel.Invalid.class));
+      assertThat(tc.remark(), result, instanceOf(PlateModel.Unparsable.class));
     }
   }
 }

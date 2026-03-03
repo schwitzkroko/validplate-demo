@@ -46,15 +46,25 @@ Valide Kennzeichen werden in die Normalform überführt:
 ```
 GET /validplate/validate/{plate}
 
-200 OK      → kanonisches Kennzeichen (z.B. "B-AB1234")
-422         → "error" (strukturell oder geografisch ungültig)
+200 OK								→ kanonisches Kennzeichen (z.B. "B-AB1234")
+422 Unprocessable Content	→ "error" (strukturell oder geografisch ungültig)
 ```
+
+❌ Idee (Noch nicht implementiert): Unterschedidung zwischen (422) strukturell ungültig und (404) geografisch ungültig. 
+
 
 ---
 
 ### ❌ Noch nicht implementiert
 
-#### 3. Inhaltsvalidierung — Sperrliste
+#### 3. Spezielle Kennzeichen-Typen (Suffix) Elektro und Oldtimer
+
+| Typ | Suffix | Beispiel |
+|---|---|---|
+| Elektrofahrzeug (E-Kennzeichen) | `E` | `B XY123E` |
+| Oldtimer (H-Kennzeichen) | `H` | `B XY123H` |
+
+#### 4. Inhaltsvalidierung — Sperrliste
 
 Prüfung der Erkennungsnummer gegen verbotene Kombinationen:
 
@@ -62,13 +72,6 @@ Prüfung der Erkennungsnummer gegen verbotene Kombinationen:
 |---|---|
 | Bundesweit verboten | `HJ`, `KZ`, `NS`, `SA`, `SS` |
 | Regional verboten | `88`, `18`, `28` (in Kombination mit `AH`, `HH`) |
-
-#### 4. Spezielle Kennzeichen-Typen (Suffix) Elektro und Oldtimer
-
-| Typ | Suffix | Beispiel |
-|---|---|---|
-| Elektrofahrzeug (E-Kennzeichen) | `E` | `B XY123E` |
-| Oldtimer (H-Kennzeichen) | `H` | `B XY123H` |
 
 #### 5. Saisonkennzeichen (Suffix) 
 

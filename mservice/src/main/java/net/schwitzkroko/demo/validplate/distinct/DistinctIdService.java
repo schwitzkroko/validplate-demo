@@ -1,10 +1,19 @@
 package net.schwitzkroko.demo.validplate.distinct;
 
+import java.util.List;
+
 public interface DistinctIdService {
 
   /**
    * Looks up a code across both district and special plate registries. Returns
-   * the matching {@link DistinctId}, or {@code null} if not found in either.
+   * all matching {@link DistinctId} entries, or an empty list if not found in
+   * either.
    */
-  DistinctId find(String code);
+  List<DistinctId> find(String code);
+
+  /**
+   * Looks up all matching {@link DistinctId} entries for any of the given codes,
+   * across both district and special plate registries.
+   */
+  List<DistinctId> findForAny(String... codes);
 }
