@@ -54,11 +54,11 @@ jobs:
     #   with:
     #     files: '**/build/test-results/**/*.xml'
 
-    - name: Deploy to Container App
-      uses: azure/container-apps-deploy-action@v2
-      with:
-        containerAppName: validplate
-        resourceGroup: validplate-demo
-        imageToDeploy: gghcr.io/schwitzkroko/validplate-demo:latest
-        registryUsername: ${{ github.actor }}
-        registryPassword: ${{ secrets.GITHUB_TOKEN }}
+    # - name: Deploy to Container App
+    #   uses: azure/container-apps-deploy-action@v2
+    #   with:
+    #     containerAppName: validplate
+    #     resourceGroup: validplate-demo
+    #     imageToDeploy: gghcr.io/schwitzkroko/validplate-demo:latest
+    #     registryUsername: ${{ github.actor }}
+    #     registryPassword: ${{ secrets.GITHUB_TOKEN }}
