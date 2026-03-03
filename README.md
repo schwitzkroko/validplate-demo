@@ -128,6 +128,8 @@ Parametrisierte Tests lesen Testfälle aus CSV-Dateien unter `src/test/resources
 
 ## Build & Run
 
+Prerequisite: Java 25 SKD in path (for gradle wrapper is used)
+
 ```bash
 # Build
 ./gradlew build
