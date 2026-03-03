@@ -4,6 +4,7 @@ plugins {
 }
 
 dependencies {
+    def lombokVersion = '1.18.42'
 
     implementation enforcedPlatform("${quarkusPlatformGroupId}:${quarkusPlatformArtifactId}:${quarkusPlatformVersion}")
     
@@ -11,18 +12,20 @@ dependencies {
     implementation 'io.quarkus:quarkus-rest-jackson'
     implementation 'io.quarkus:quarkus-arc'
     implementation 'io.quarkus:quarkus-smallrye-openapi'
+    implementation 'io.quarkus:quarkus-smallrye-health'
     implementation 'io.quarkus:quarkus-container-image-docker'
     
     implementation 'org.apache.commons:commons-text'
     implementation 'org.slf4j:slf4j-api'
-    implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-csv:2.20.1'
-    implementation 'org.projectlombok:lombok:1.18.42'
+    implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-csv'
+    implementation "org.projectlombok:lombok:${lombokVersion}"
     
-    annotationProcessor 'org.projectlombok:lombok:1.18.42'
-    testAnnotationProcessor 'org.projectlombok:lombok:1.18.42'
+    annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
     
     testImplementation 'io.quarkus:quarkus-junit'
     testImplementation 'io.rest-assured:rest-assured'
     testImplementation 'org.hamcrest:hamcrest'
     testRuntimeOnly 'ch.qos.logback:logback-classic:1.5.18'
+
+    testAnnotationProcessor "org.projectlombok:lombok:${lombokVersion}"
 }
