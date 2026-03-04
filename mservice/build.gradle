@@ -1,6 +1,7 @@
 plugins {
-    id 'buildlogic.java-common-conventions'
+    id 'buildlogic.java-application-conventions'
     id 'io.quarkus'
+    id 'jacoco'
 }
 
 dependencies {
@@ -25,7 +26,20 @@ dependencies {
     testImplementation 'io.quarkus:quarkus-junit'
     testImplementation 'io.rest-assured:rest-assured'
     testImplementation 'org.hamcrest:hamcrest'
+    
+    testImplementation("io.quarkus:quarkus-jacoco")
+        
     testRuntimeOnly 'ch.qos.logback:logback-classic:1.5.18'
-
+    
     testAnnotationProcessor "org.projectlombok:lombok:${lombokVersion}"
+}
+
+
+test {
+    finalizedBy jacocoTestReport
+    jacoco {
+        excludeClassLoaders = ["*QuarkusClassLoader"] 
+        destinationFile = layout.buildDirectory.file("jacoco-quarkus.exec").get().asFile 
+    }
+    jacocoTestReport.enabled = false 
 }
