@@ -15,7 +15,7 @@ public sealed interface DistinctId permits DistinctId.DistrictRecord, DistinctId
   /** The plate code itself, e.g. {@code "A"}, {@code "BP"}, {@code "THW"}. */
   String code();
 
-  /** The plate code itself, e.g. {@code "A"}, {@code "BP"}, {@code "THW"}. */
+  /** The type of the plate, e.g. "Länder" for "B" or "Bund" for "THW". */
   String type();
 
   /**

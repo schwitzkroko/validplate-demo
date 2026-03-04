@@ -38,7 +38,8 @@ class PlateMatcherUtil {
    * separator) "LIIT 100" -> "LIIT100" (no separator — may be ambiguous)
    *
    * @param plate
-   * @return
+   *          raw input
+   * @return normalized plate string, ready for parsing
    */
   String normalize(String plate) {
     String normalised = plate.strip().toUpperCase().replaceAll("([A-ZÄÖÜ]{1,3})[\\s-]+([A-Z])", "$1-$2")
@@ -47,20 +48,28 @@ class PlateMatcherUtil {
     return normalised;
   }
 
-  PlateModel parse(String normalised) {
+  /**
+   * Parses the normalised plate string into a PlateModel. Returns Unparsable if
+   * it doesn't match any known pattern, Ambiguous if it matches the unseparated
+   * pattern, and Valid if it matches the separated pattern.
+   *
+   * @param normalized
+   * @return PlateModel representing the parsed plate
+   */
+  PlateModel parse(String normalized) {
 
-    Matcher separated = PLATE_PATTERN_SEPARATED.matcher(normalised);
+    Matcher separated = PLATE_PATTERN_SEPARATED.matcher(normalized);
     if (separated.matches()) {
       return new PlateModel.Valid(separated.group(1), separated.group(2), separated.group(3));
     }
 
-    Matcher unseparated = PLATE_PATTERN_UNSEPARATED.matcher(normalised);
+    Matcher unseparated = PLATE_PATTERN_UNSEPARATED.matcher(normalized);
     if (unseparated.matches()) {
-      log.debug("parse: '{}' matched unseparated pattern — ambiguous", normalised);
+      log.debug("parse: '{}' matched unseparated pattern — ambiguous", normalized);
       return new PlateModel.Ambiguous(unseparated.group(1), unseparated.group(3));
     }
 
-    log.debug("parse: '{}' does not match any plate pattern", normalised);
+    log.debug("parse: '{}' does not match any plate pattern", normalized);
     return new PlateModel.Unparsable();
   }
 }
